@@ -26,19 +26,36 @@ with open(PATH_UNIQUE_VALUES) as file:
     dict_unique = json.load(file)
 city = st.sidebar.selectbox("Город", (dict_unique["city"]))
 house_wall_type = st.sidebar.selectbox("Тип стен", (dict_unique["house_wall_type"]))
-renovation = st.sidebar.selectbox("Ремонт", (dict_unique["renovation"]))
+renovation = st.sidebar.selectbox("Ремонт", ([
+'Отсутствует',
+'Частичный ремонт',
+'Средний',
+'Хороший',
+'Отличный',
+'Предчистовая отделка',
+'Чистовая отделка',
+'С отделкой',
+'Косметический',
+'Дизайнерский',
+'Евроремонт']))
 
 
 area = st.sidebar.slider(
     "Площадь",
-    min_value=min(dict_unique["area"]),
+    min_value=0.0,
     max_value=max(dict_unique["area"])
 )
 
 rooms = st.sidebar.slider(
     "Количество комнат",
-    min_value=min(dict_unique["rooms"]),
+    min_value=0,
     max_value=max(dict_unique["rooms"])
+)
+
+build_year = st.sidebar.slider(
+    "Год постройки",
+    min_value=min(dict_unique["build_year"]),
+    max_value=max(dict_unique["build_year"])
 )
 
 floor = st.sidebar.slider(
@@ -49,25 +66,8 @@ floor = st.sidebar.slider(
 
 house_floors = st.sidebar.slider(
     "Этажность дома",
-    min_value=min(dict_unique["house_floors"]),
+    min_value=floor,
     max_value=max(dict_unique["house_floors"])
-)
-kitchen_area = st.sidebar.slider(
-    "Площадь кухни",
-    min_value=min(dict_unique["kitchen_area"]),
-    max_value=max(dict_unique["kitchen_area"])
-)
-
-balconies = st.sidebar.slider(
-    "Количество балконов",
-    min_value=min(dict_unique["balconies"]),
-    max_value=max(dict_unique["balconies"])
-)
-
-lifts = st.sidebar.slider(
-    "Количество лифтов",
-    min_value=min(dict_unique["lifts"]),
-    max_value=max(dict_unique["lifts"])
 )
 
 dict_data = {
@@ -76,11 +76,9 @@ dict_data = {
     "renovation": renovation,
     "area": area,
     "rooms": rooms,
+    "build_year": build_year,
     "floor": floor,
     "house_floors": house_floors,
-    "kitchen_area": kitchen_area,
-    "balconies": balconies,
-    "lifts": lifts,
 }
 data_predict = pd.DataFrame([dict_data])
 model = joblib.load(PATH_MODEL)
